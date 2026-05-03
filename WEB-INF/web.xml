@@ -45,4 +45,14 @@
         <url-pattern>/patients</url-pattern>
     </servlet-mapping>
 
+    <!-- Servlet des rendez-vous -->
+    <servlet>
+        <servlet-name>RendezVousServlet</servlet-name>
+        <servlet-class>RendezVousServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RendezVousServlet</servlet-name>
+        <url-pattern>/rendez-vous</url-pattern>
+    </servlet-mapping>
+
 </web-app>

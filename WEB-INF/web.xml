@@ -5,6 +5,7 @@
          https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
 
+<!-- Servlet de connexion -->
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>LoginServlet</servlet-class>
@@ -14,6 +15,7 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
+    <!-- Servlet de deconnexion -->
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>LogoutServlet</servlet-class>
@@ -23,6 +25,7 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
+    <!-- Servlet des medecins -->
     <servlet>
         <servlet-name>MedecinServlet</servlet-name>
         <servlet-class>MedecinServlet</servlet-class>
@@ -30,6 +33,16 @@
     <servlet-mapping>
         <servlet-name>MedecinServlet</servlet-name>
         <url-pattern>/medecins</url-pattern>
+    </servlet-mapping>
+
+    <!-- Servlet des patients -->
+    <servlet>
+        <servlet-name>PatientServlet</servlet-name>
+        <servlet-class>PatientServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PatientServlet</servlet-name>
+        <url-pattern>/patients</url-pattern>
     </servlet-mapping>
 
 </web-app>

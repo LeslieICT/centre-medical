@@ -7,14 +7,14 @@
     }
     String login = (String) session.getAttribute("login");
     String role = (String) session.getAttribute("role");
-    List<Map<String, String>> rdvList =
-        (List<Map<String, String>>) request.getAttribute("rdvList");
+    List<Map<String, String>> consultations =
+        (List<Map<String, String>>) request.getAttribute("consultations");
 %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Liste des Rendez-vous</title>
+    <title>Liste des Consultations</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; background-color: #f0f4f8; }
@@ -93,34 +93,6 @@
         }
         td { padding: 12px 15px; border-bottom: 1px solid #eee; }
         tr:hover { background-color: #f0f4f8; }
-        .statut {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .en_attente { background-color: #fff3cd; color: #856404; }
-        .confirme { background-color: #d4edda; color: #155724; }
-        .annule { background-color: #f8d7da; color: #721c24; }
-        .termine { background-color: #d1ecf1; color: #0c5460; }
-        .btn-confirmer {
-            background-color: #28a745;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 13px;
-            margin-right: 5px;
-        }
-        .btn-annuler {
-            background-color: #ffc107;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 13px;
-            margin-right: 5px;
-        }
         .btn-supprimer {
             background-color: #e74c3c;
             color: white;
@@ -144,55 +116,39 @@
             <a href="/centre-medical/dashboard.jsp">🏠 Tableau de bord</a>
             <a href="/centre-medical/medecins">👨‍⚕️ Médecins</a>
             <a href="/centre-medical/patients">🧑 Patients</a>
-            <a href="/centre-medical/rendez-vous" class="actif">📅 Rendez-vous</a>
-            <a href="/centre-medical/consultations">🩺 Consultations</a>
+            <a href="/centre-medical/rendez-vous">📅 Rendez-vous</a>
+            <a href="/centre-medical/consultations" class="actif">🩺 Consultations</a>
         </div>
 
         <div class="content">
             <div class="top">
-                <h2>📅 Liste des Rendez-vous</h2>
-                <a href="/centre-medical/rendez-vous?action=nouveau" class="btn-ajouter">+ Nouveau rendez-vous</a>
+                <h2>🩺 Liste des Consultations</h2>
+                <a href="/centre-medical/consultations?action=nouveau" class="btn-ajouter">+ Nouvelle consultation</a>
             </div>
 
             <table>
                 <tr>
+                    <th>Date</th>
                     <th>Patient</th>
                     <th>Médecin</th>
-                    <th>Date</th>
-                    <th>Heure</th>
-                    <th>Motif</th>
-                    <th>Statut</th>
+                    <th>Diagnostic</th>
+                    <th>Traitement</th>
                     <th>Actions</th>
                 </tr>
-                <% if (rdvList != null) {
-                    for (Map<String, String> r : rdvList) { %>
+                <% if (consultations != null) {
+                    for (Map<String, String> c : consultations) { %>
                 <tr>
-                    <td><%= r.get("patient") %></td>
-                    <td><%= r.get("medecin") %></td>
-                    <td><%= r.get("date_rdv") %></td>
-                    <td><%= r.get("heure_rdv") %></td>
-                    <td><%= r.get("motif") %></td>
+                    <td><%= c.get("date_consultation") %></td>
+                    <td><%= c.get("patient") %></td>
+                    <td><%= c.get("medecin") %></td>
+                    <td><%= c.get("diagnostic") %></td>
+                    <td><%= c.get("traitement") %></td>
                     <td>
-                        <span class="statut <%= r.get("statut") %>">
-                            <%= r.get("statut") %>
-                        </span>
-                    </td>
-                    <td>
-                        <% if ("en_attente".equals(r.get("statut"))) { %>
-                            <a href="/centre-medical/rendez-vous?action=confirmer&id=<%= r.get("id") %>"
-                               class="btn-confirmer">Confirmer</a>
-                            <a href="/centre-medical/rendez-vous?action=annuler&id=<%= r.get("id") %>"
-                               class="btn-annuler"
-                               onclick="return confirm('Annuler ce rendez-vous ?')">Annuler</a>
-                        <% } else if ("confirme".equals(r.get("statut"))) { %>
-                            <a href="/centre-medical/rendez-vous?action=annuler&id=<%= r.get("id") %>"
-                               class="btn-annuler"
-                               onclick="return confirm('Annuler ce rendez-vous ?')">Annuler</a>
-                        <% } else if ("annule".equals(r.get("statut")) || "termine".equals(r.get("statut"))) { %>
-                            <a href="/centre-medical/rendez-vous?action=supprimer&id=<%= r.get("id") %>"
-                               class="btn-supprimer"
-                               onclick="return confirm('Supprimer définitivement ce rendez-vous ?')">Supprimer</a>
-                        <% } %>
+                        <a href="/centre-medical/consultations?action=supprimer&id=<%= c.get("id") %>"
+                           class="btn-supprimer"
+                           onclick="return confirm('Supprimer cette consultation ?')">
+                           Supprimer
+                        </a>
                     </td>
                 </tr>
                 <% }} %>

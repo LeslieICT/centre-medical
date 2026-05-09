@@ -21,11 +21,41 @@ public class RendezVousServlet extends HttpServlet {
         try {
             Connection conn = DBConnection.getConnection();
 
+            // Confirmer un rendez-vous
+            if ("confirmer".equals(action)) {
+                String id = request.getParameter("id");
+                String sql = "UPDATE rendez_vous SET statut='confirme' WHERE id=?";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setInt(1, Integer.parseInt(id));
+                ps.executeUpdate();
+                conn.close();
+                response.sendRedirect("/centre-medical/rendez-vous");
+                return;
+            }
+
             // Annuler un rendez-vous
             if ("annuler".equals(action)) {
                 String id = request.getParameter("id");
                 String sql = "UPDATE rendez_vous SET statut='annule' WHERE id=?";
                 PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setInt(1, Integer.parseInt(id));
+                ps.executeUpdate();
+                conn.close();
+                response.sendRedirect("/centre-medical/rendez-vous");
+                return;
+            }
+
+            // Supprimer un rendez-vous
+            if ("supprimer".equals(action)) {
+                String id = request.getParameter("id");
+                // Supprimer d'abord les consultations liées
+                PreparedStatement psDelConsult = conn.prepareStatement(
+                    "DELETE FROM consultations WHERE rendez_vous_id=?");
+                psDelConsult.setInt(1, Integer.parseInt(id));
+                psDelConsult.executeUpdate();
+                // Ensuite supprimer le rendez-vous
+                PreparedStatement ps = conn.prepareStatement(
+                    "DELETE FROM rendez_vous WHERE id=?");
                 ps.setInt(1, Integer.parseInt(id));
                 ps.executeUpdate();
                 conn.close();

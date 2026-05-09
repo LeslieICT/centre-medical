@@ -24,8 +24,60 @@ public class PatientServlet extends HttpServlet {
             // Supprimer un patient
             if ("supprimer".equals(action)) {
                 String id = request.getParameter("id");
-                String sql = "DELETE FROM patients WHERE id=?";
-                PreparedStatement ps = conn.prepareStatement(sql);
+
+                // Vérifier si le patient a des rendez-vous actifs
+                PreparedStatement psCheck = conn.prepareStatement(
+                    "SELECT COUNT(*) FROM rendez_vous WHERE patient_id=? AND statut != 'annule'");
+                psCheck.setInt(1, Integer.parseInt(id));
+                ResultSet rsCheck = psCheck.executeQuery();
+                rsCheck.next();
+                int nbRdv = rsCheck.getInt(1);
+
+                if (nbRdv > 0) {
+                    request.setAttribute("erreur",
+                        "Impossible de supprimer ce patient car il a " + nbRdv +
+                        " rendez-vous actif(s) dans le système.");
+
+                    // Recharger la liste
+                    String sql = "SELECT * FROM patients ORDER BY nom";
+                    PreparedStatement ps = conn.prepareStatement(sql);
+                    ResultSet rs = ps.executeQuery();
+                    List<Map<String, String>> patients = new ArrayList<>();
+                    while (rs.next()) {
+                        Map<String, String> p = new HashMap<>();
+                        p.put("id", rs.getString("id"));
+                        p.put("numero_dossier", rs.getString("numero_dossier"));
+                        p.put("nom", rs.getString("nom"));
+                        p.put("prenom", rs.getString("prenom"));
+                        p.put("date_naissance", rs.getString("date_naissance"));
+                        p.put("sexe", rs.getString("sexe"));
+                        p.put("telephone", rs.getString("telephone"));
+                        p.put("groupe_sanguin", rs.getString("groupe_sanguin"));
+                        patients.add(p);
+                    }
+                    request.setAttribute("patients", patients);
+                    conn.close();
+                    request.getRequestDispatcher("/patients/liste_patients.jsp")
+                           .forward(request, response);
+                    return;
+                }
+
+                // Supprimer d'abord les consultations liées aux rendez-vous annulés
+                PreparedStatement psDelConsult = conn.prepareStatement(
+                    "DELETE FROM consultations WHERE rendez_vous_id IN " +
+                    "(SELECT id FROM rendez_vous WHERE patient_id=? AND statut='annule')");
+                psDelConsult.setInt(1, Integer.parseInt(id));
+                psDelConsult.executeUpdate();
+
+                // Ensuite supprimer les rendez-vous annulés
+                PreparedStatement psDelRdv = conn.prepareStatement(
+                    "DELETE FROM rendez_vous WHERE patient_id=? AND statut='annule'");
+                psDelRdv.setInt(1, Integer.parseInt(id));
+                psDelRdv.executeUpdate();
+
+                // Enfin supprimer le patient
+                PreparedStatement ps = conn.prepareStatement(
+                    "DELETE FROM patients WHERE id=?");
                 ps.setInt(1, Integer.parseInt(id));
                 ps.executeUpdate();
                 conn.close();

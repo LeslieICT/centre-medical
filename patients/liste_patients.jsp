@@ -9,6 +9,7 @@
     String role = (String) session.getAttribute("role");
     List<Map<String, String>> patients =
         (List<Map<String, String>>) request.getAttribute("patients");
+    String erreur = (String) request.getAttribute("erreur");
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -35,10 +36,7 @@
             padding: 8px 15px;
             border-radius: 5px;
         }
-        .container {
-            display: flex;
-            min-height: calc(100vh - 60px);
-        }
+        .container { display: flex; min-height: calc(100vh - 60px); }
         .sidebar {
             width: 220px;
             background-color: #1e3a5f;
@@ -79,6 +77,15 @@
             padding: 10px 20px;
             border-radius: 5px;
             text-decoration: none;
+        }
+        .erreur {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 12px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
         }
         table {
             width: 100%;
@@ -128,6 +135,12 @@
                 <h2>🧑 Liste des Patients</h2>
                 <a href="/centre-medical/patients/ajouter_patient.html" class="btn-ajouter">+ Ajouter un patient</a>
             </div>
+
+            <% if (erreur != null) { %>
+            <div class="erreur">
+                ⚠️ <%= erreur %>
+            </div>
+            <% } %>
 
             <table>
                 <tr>

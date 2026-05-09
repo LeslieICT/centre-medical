@@ -55,4 +55,14 @@
         <url-pattern>/rendez-vous</url-pattern>
     </servlet-mapping>
 
+    <!-- Servlet des consultations -->
+    <servlet>
+        <servlet-name>ConsultationServlet</servlet-name>
+        <servlet-class>ConsultationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConsultationServlet</servlet-name>
+        <url-pattern>/consultations</url-pattern>
+    </servlet-mapping>
+
 </web-app>

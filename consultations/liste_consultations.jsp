@@ -70,8 +70,23 @@
             margin-bottom: 20px;
         }
         .top h2 { color: #1B6CA8; }
+        .top-buttons { display: flex; gap: 10px; }
         .btn-ajouter {
             background-color: #1B6CA8;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn-pdf {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn-csv {
+            background-color: #28a745;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
@@ -123,7 +138,11 @@
         <div class="content">
             <div class="top">
                 <h2>🩺 Liste des Consultations</h2>
-                <a href="/centre-medical/consultations?action=nouveau" class="btn-ajouter">+ Nouvelle consultation</a>
+                <div class="top-buttons">
+                    <a href="/centre-medical/consultations?action=nouveau" class="btn-ajouter">+ Nouvelle</a>
+                    <a href="/centre-medical/pdf?type=consultations" class="btn-pdf" target="_blank">📄 PDF</a>
+                    <a href="/centre-medical/csv?type=consultations" class="btn-csv">📊 CSV</a>
+                </div>
             </div>
 
             <table>
@@ -133,6 +152,8 @@
                     <th>Médecin</th>
                     <th>Diagnostic</th>
                     <th>Traitement</th>
+                    <th>Montant</th>
+                    <th>Payé</th>
                     <th>Actions</th>
                 </tr>
                 <% if (consultations != null) {
@@ -143,6 +164,8 @@
                     <td><%= c.get("medecin") %></td>
                     <td><%= c.get("diagnostic") %></td>
                     <td><%= c.get("traitement") %></td>
+                    <td><%= c.get("montant_facture") %> FCFA</td>
+                    <td><%= "true".equals(c.get("paye")) ? "✅" : "❌" %></td>
                     <td>
                         <a href="/centre-medical/consultations?action=supprimer&id=<%= c.get("id") %>"
                            class="btn-supprimer"

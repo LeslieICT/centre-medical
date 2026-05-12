@@ -71,8 +71,23 @@
             margin-bottom: 20px;
         }
         .top h2 { color: #1B6CA8; }
+        .top-buttons { display: flex; gap: 10px; }
         .btn-ajouter {
             background-color: #1B6CA8;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn-pdf {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn-csv {
+            background-color: #28a745;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
@@ -133,13 +148,14 @@
         <div class="content">
             <div class="top">
                 <h2>🧑 Liste des Patients</h2>
-                <a href="/centre-medical/patients/ajouter_patient.html" class="btn-ajouter">+ Ajouter un patient</a>
+                <div class="top-buttons">
+                    <a href="/centre-medical/patients/ajouter_patient.html" class="btn-ajouter">+ Ajouter</a>
+                    <a href="/centre-medical/csv?type=patients" class="btn-csv">📊 CSV</a>
+                </div>
             </div>
 
             <% if (erreur != null) { %>
-            <div class="erreur">
-                ⚠️ <%= erreur %>
-            </div>
+            <div class="erreur">⚠️ <%= erreur %></div>
             <% } %>
 
             <table>

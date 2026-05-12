@@ -7,7 +7,7 @@
     }
     String login = (String) session.getAttribute("login");
     String role = (String) session.getAttribute("role");
-    List<Map<String, String>> medecins = 
+    List<Map<String, String>> medecins =
         (List<Map<String, String>>) request.getAttribute("medecins");
 %>
 <!DOCTYPE html>
@@ -35,10 +35,7 @@
             padding: 8px 15px;
             border-radius: 5px;
         }
-        .container {
-            display: flex;
-            min-height: calc(100vh - 60px);
-        }
+        .container { display: flex; min-height: calc(100vh - 60px); }
         .sidebar {
             width: 220px;
             background-color: #1e3a5f;
@@ -73,8 +70,23 @@
             margin-bottom: 20px;
         }
         .top h2 { color: #1B6CA8; }
+        .top-buttons { display: flex; gap: 10px; }
         .btn-ajouter {
             background-color: #1B6CA8;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn-pdf {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn-csv {
+            background-color: #28a745;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
@@ -126,7 +138,11 @@
         <div class="content">
             <div class="top">
                 <h2>👨‍⚕️ Liste des Médecins</h2>
-                <a href="/centre-medical/medecins/ajouter_medecin.html" class="btn-ajouter">+ Ajouter un médecin</a>
+                <div class="top-buttons">
+                    <a href="/centre-medical/medecins/ajouter_medecin.html" class="btn-ajouter">+ Ajouter</a>
+                    <a href="/centre-medical/pdf?type=medecins" class="btn-pdf" target="_blank">📄 PDF</a>
+                    <a href="/centre-medical/csv?type=medecins" class="btn-csv">📊 CSV</a>
+                </div>
             </div>
 
             <table>

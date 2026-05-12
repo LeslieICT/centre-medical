@@ -85,4 +85,14 @@
         <location>/erreur500.html</location>
     </error-page>
 
+    <!-- Servlet CSV -->
+    <servlet>
+        <servlet-name>CsvServlet</servlet-name>
+        <servlet-class>CsvServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CsvServlet</servlet-name>
+        <url-pattern>/csv</url-pattern>
+    </servlet-mapping>
+
 </web-app>

@@ -15,7 +15,11 @@ public class AuthFilter implements Filter {
         String uri = httpRequest.getRequestURI();
 
         // Pages accessibles sans connexion
-        if (uri.contains("/login") || uri.contains("/css/") || uri.endsWith(".css")) {
+        if (uri.contains("/login") || 
+            uri.contains("/css/") || 
+            uri.endsWith(".css") ||
+            uri.contains("/pdf") ||
+            uri.contains("/csv")) {
             chain.doFilter(request, response);
             return;
         }

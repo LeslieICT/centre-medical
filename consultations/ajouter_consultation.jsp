@@ -117,6 +117,10 @@
                     <label>Observations</label>
                     <textarea name="observations" rows="3" placeholder="Observations complémentaires..."></textarea>
                 </div>
+                <div class="form-group">
+                     <label>Montant de la consultation (FCFA)</label>
+                     <input type="number" name="montant_facture" placeholder="Ex: 5000" required />
+                </div>
                 <button type="submit" class="btn">Enregistrer</button>
             </form>
 

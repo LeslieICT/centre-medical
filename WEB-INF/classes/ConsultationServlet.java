@@ -24,19 +24,16 @@ public class ConsultationServlet extends HttpServlet {
             // Supprimer une consultation
             if ("supprimer".equals(action)) {
                 String id = request.getParameter("id");
-                // Récupérer le rendez_vous_id avant de supprimer
                 PreparedStatement psGet = conn.prepareStatement(
                     "SELECT rendez_vous_id FROM consultations WHERE id=?");
                 psGet.setInt(1, Integer.parseInt(id));
                 ResultSet rsGet = psGet.executeQuery();
                 if (rsGet.next()) {
                     int rdvId = rsGet.getInt("rendez_vous_id");
-                    // Supprimer la consultation
                     PreparedStatement ps = conn.prepareStatement(
                         "DELETE FROM consultations WHERE id=?");
                     ps.setInt(1, Integer.parseInt(id));
                     ps.executeUpdate();
-                    // Remettre le rendez-vous à confirme
                     PreparedStatement psUpdate = conn.prepareStatement(
                         "UPDATE rendez_vous SET statut='confirme' WHERE id=?");
                     psUpdate.setInt(1, rdvId);
@@ -72,8 +69,9 @@ public class ConsultationServlet extends HttpServlet {
                 return;
             }
 
-            // Afficher la liste
+            // Afficher la liste avec montant_facture et paye
             String sql = "SELECT c.id, c.date_consultation, c.diagnostic, c.traitement, " +
+                        "c.montant_facture, c.paye, " +
                         "p.nom as pnom, p.prenom as pprenom, " +
                         "m.nom as mnom, m.prenom as mprenom " +
                         "FROM consultations c " +
@@ -90,6 +88,8 @@ public class ConsultationServlet extends HttpServlet {
                 c.put("date_consultation", rs.getString("date_consultation"));
                 c.put("diagnostic", rs.getString("diagnostic"));
                 c.put("traitement", rs.getString("traitement"));
+                c.put("montant_facture", rs.getString("montant_facture"));
+                c.put("paye", rs.getString("paye"));
                 c.put("patient", rs.getString("pnom") + " " + rs.getString("pprenom"));
                 c.put("medecin", rs.getString("mnom") + " " + rs.getString("mprenom"));
                 consultations.add(c);
@@ -131,8 +131,8 @@ public class ConsultationServlet extends HttpServlet {
                 int medecinId = rsRdv.getInt("medecin_id");
 
                 String sql = "INSERT INTO consultations (rendez_vous_id, patient_id, medecin_id, " +
-                            "date_consultation, diagnostic, traitement, observations) " +
-                            "VALUES (?, ?, ?, NOW(), ?, ?, ?)";
+                            "date_consultation, diagnostic, traitement, observations, montant_facture, paye) " +
+                            "VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?)";
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setInt(1, rdvId);
                 ps.setInt(2, patientId);
@@ -140,6 +140,9 @@ public class ConsultationServlet extends HttpServlet {
                 ps.setString(4, request.getParameter("diagnostic"));
                 ps.setString(5, request.getParameter("traitement"));
                 ps.setString(6, request.getParameter("observations"));
+                String montant = request.getParameter("montant_facture");
+                ps.setDouble(7, montant != null && !montant.isEmpty() ? Double.parseDouble(montant) : 0);
+                ps.setBoolean(8, false);
                 ps.executeUpdate();
 
                 PreparedStatement psUpdate = conn.prepareStatement(
